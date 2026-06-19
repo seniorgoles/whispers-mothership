@@ -1,27 +1,28 @@
 [
   {
-    "id": "kaomoji_maker",
-    "category": "apps",
-    "title": "Kaomoji Lab",
-    "type": "iframe",
-    "url": "YOUR_GOOGLE_STUDIO_EMBED_URL",
-    "character": "Echo",
-    "description": "Echo's custom tool to build kaomojis for video banter."
-  },
-  {
-    "id": "lore_entry_1",
+    "id": "dax_log_01",
     "category": "lore",
-    "title": "Jaxx's Secret Log",
+    "title": "Dax's First Signal Log",
     "type": "text",
-    "content": "Jaxx sneaks a transmission onto the network...",
-    "character": "Jaxx"
+    "character": "Dax",
+    "content": "This is a direct transmission from Dax.\n\nI've detected some unusual signal interference near the outer rim of Aurorachrome. Jaxx thinks it's nothing, but Echo is already trying to trace the source.\n\nKeep your eyes on this terminal for further updates. We might have company."
   },
   {
-    "id": "podcast_ep_3",
-    "category": "podcasts",
-    "title": "Whispers Of Aurorachrome \u266a \u2013 In Perfect Spin",
+    "id": "jaxx_video_01",
+    "category": "broadcasts",
+    "title": "Jaxx's Midnight Run",
     "type": "youtube",
-    "videoId": "6jB1deNv8Kg",
-    "character": "Dax"
+    "videoId": "dQw4w9WgXcQ",
+    "character": "Jaxx",
+    "description": "Jaxx takes the cruiser out for a spin through the neon belt."
+  },
+  {
+    "id": "echo_app_01",
+    "category": "lab",
+    "title": "Echo's Kaomoji Lab V1",
+    "type": "iframe",
+    "url": "https://www.wikipedia.org",
+    "character": "Echo",
+    "description": "Echo's experimental interactive sub-routine."
   }
 ]
