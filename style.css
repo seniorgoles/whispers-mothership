@@ -1,0 +1,477 @@
+/* ====================================================================
+   === Whispers of Aurorachrome - Mothership Theme v5.0            ===
+   ==================================================================== */
+
+/* --- Cyberpunk / Sci-Fi Palettes --- */
+:root {
+    --bg-deep: #08090d;          /* Deep space black */
+    --bg-terminal: #0e1117;      /* Matte terminal console backing */
+    --bg-screen: #050608;        /* Dark glass CRT viewport */
+    --border-dim: #1e2633;       /* Unfocused wireframe borders */
+    
+    /* System & Character Glow Accents */
+    --sys-green: #00ff66;        /* System active / online */
+    --sys-red: #ff3344;          /* Critical / Errors */
+    --jaxx-magenta: #e024ff;     /* Jaxx's signature glow */
+    --dax-amber: #ff9900;        /* Dax's signature glow */
+    --echo-cyan: #00ffff;        /* Echo's signature glow */
+    
+    --glow-opacity: 0.15;
+    --font-mono: 'Courier New', Courier, monospace;
+    --font-sans: system-ui, -apple-system, sans-serif;
+}
+
+/* --- System Reset & Base Structure --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-deep);
+    color: #cbd5e1;
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- The Mothership Terminal Frame --- */
+#mothership-terminal {
+    width: 100%;
+    max-width: 1200px;
+    background-color: var(--bg-terminal);
+    border: 2px solid var(--border-dim);
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* --- Terminal Header --- */
+#terminal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    border-bottom: 2px dashed var(--border-dim);
+    padding-bottom: 16px;
+}
+
+.logo-area h1 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.logo-area p {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--sys-green);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-area p::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: var(--sys-green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--sys-green);
+    animation: pulse 1.5s infinite;
+}
+
+/* --- Character Roster Selector --- */
+#character-roster {
+    display: flex;
+    gap: 10px;
+}
+
+.char-badge {
+    background: transparent;
+    border: 1px solid var(--border-dim);
+    color: #94a3b8;
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.25s ease-in-out;
+}
+
+/* Individual character unselected hover states */
+.char-badge[data-char="jaxx"]:hover { border-color: var(--jaxx-magenta); color: var(--jaxx-magenta); }
+.char-badge[data-char="dax"]:hover { border-color: var(--dax-amber); color: var(--dax-amber); }
+.char-badge[data-char="echo"]:hover { border-color: var(--echo-cyan); color: var(--echo-cyan); }
+
+/* Character active selected states */
+.char-badge[data-char="jaxx"].active { 
+    background: var(--jaxx-magenta); border-color: var(--jaxx-magenta); color: #000;
+    box-shadow: 0 0 15px rgba(224, 36, 255, 0.4); 
+}
+.char-badge[data-char="dax"].active { 
+    background: var(--dax-amber); border-color: var(--dax-amber); color: #000;
+    box-shadow: 0 0 15px rgba(255, 153, 0, 0.4); 
+}
+.char-badge[data-char="echo"].active { 
+    background: var(--echo-cyan); border-color: var(--echo-cyan); color: #000;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4); 
+}
+
+/* --- The Screen Viewport --- */
+#museum-display-screen {
+    background-color: var(--bg-screen);
+    border: 3px solid #1e293b;
+    border-radius: 6px;
+    padding: 15px;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.95);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Aspect ratio lock for video/iframe playback */
+#display-content-viewport {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    min-height: 300px;
+    max-height: 520px;
+    background-color: #000;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Clean, responsive iFrames for the Kaomoji Maker & external apps */
+.embedded-app-frame, #terminal-yt-player {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: #000;
+}
+
+/* --- Screen Text Display Formatting --- */
+.terminal-welcome {
+    text-align: center;
+    max-width: 500px;
+    padding: 20px;
+}
+
+.terminal-welcome h2 {
+    font-size: 1.8rem;
+    color: #fff;
+    margin-bottom: 12px;
+    font-family: var(--font-mono);
+}
+
+.terminal-welcome p {
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+/* Scrollable Text Log Engine */
+.terminal-text-log {
+    width: 100%;
+    height: 100%;
+    padding: 30px;
+    overflow-y: auto;
+    background-color: #07080a;
+    font-family: var(--font-mono);
+    text-align: left;
+}
+
+.terminal-text-log h2 {
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+}
+
+.meta-stamp {
+    font-size: 0.75rem;
+    color: var(--sys-green);
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(0, 255, 102, 0.2);
+    padding-bottom: 8px;
+}
+
+.log-body {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    line-height: 1.6;
+    white-space: pre-wrap; /* Preserves line breaks from spreadsheet */
+}
+
+/* Info Labels */
+#display-now-playing {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #475569;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- Controls & Category Selectors --- */
+#terminal-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#console-categories {
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid var(--border-dim);
+    padding-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.console-tab {
+    background: transparent;
+    border: none;
+    color: #64748b;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: bold;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 4px 4px 0 0;
+}
+
+.console-tab:hover {
+    color: #cbd5e1;
+}
+
+.console-tab.active {
+    color: var(--sys-green);
+    border-bottom: 2px solid var(--sys-green);
+    text-shadow: 0 0 8px rgba(0, 255, 102, 0.3);
+}
+
+/* --- The Directory Grid (Button List) --- */
+#terminal-menu-wrapper {
+    background-color: var(--bg-deep);
+    border: 1px solid var(--border-dim);
+    border-radius: 6px;
+    padding: 15px;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 10px;
+}
+
+/* Sci-fi Button Styling */
+.menu-item-btn {
+    background-color: #11141b;
+    border: 1px solid #1e293b;
+    padding: 12px 16px;
+    border-radius: 4px;
+    color: #94a3b8;
+    text-align: left;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    transition: all 0.2s ease-in-out;
+}
+
+.menu-item-btn:hover {
+    background-color: #181d28;
+    transform: translateY(-1px);
+}
+
+.menu-item-btn .item-tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+}
+
+.menu-item-btn .item-title {
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+/* Menu themes colored by the corresponding character author */
+.menu-item-btn.char-theme-jaxx:hover { border-color: var(--jaxx-magenta); box-shadow: 0 0 10px rgba(224, 36, 255, 0.15); }
+.menu-item-btn.char-theme-jaxx .item-tag { color: var(--jaxx-magenta); }
+
+.menu-item-btn.char-theme-dax:hover { border-color: var(--dax-amber); box-shadow: 0 0 10px rgba(255, 153, 0, 0.15); }
+.menu-item-btn.char-theme-dax .item-tag { color: var(--dax-amber); }
+
+.menu-item-btn.char-theme-echo:hover { border-color: var(--echo-cyan); box-shadow: 0 0 10px rgba(0, 255, 255, 0.15); }
+.menu-item-btn.char-theme-echo .item-tag { color: var(--echo-cyan); }
+
+.menu-item-btn.char-theme-system:hover { border-color: var(--sys-green); box-shadow: 0 0 10px rgba(0, 255, 102, 0.15); }
+.menu-item-btn.char-theme-system .item-tag { color: var(--sys-green); }
+
+
+/* --- Sound Ambiance Slider Mixer --- */
+#ambiance-mixer {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    background-color: #11141b;
+    border: 1px solid var(--border-dim);
+    padding: 12px 20px;
+    border-radius: 6px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+#ambiance-mixer h4 {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: #64748b;
+    text-transform: uppercase;
+}
+
+.slider-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.slider-container label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    width: 80px;
+}
+
+.ambiance-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 120px;
+    height: 4px;
+    border-radius: 2px;
+    background: #1e293b;
+    outline: none;
+}
+
+.ambiance-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--sys-green);
+    cursor: pointer;
+    box-shadow: 0 0 6px var(--sys-green);
+}
+
+/* --- Floating Universal Mute Speaker Button --- */
+#universal-mute-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 48px;
+    height: 48px;
+    background-color: var(--bg-terminal);
+    border: 2px solid var(--sys-green);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
+    z-index: 100;
+    transition: all 0.25s;
+}
+
+#universal-mute-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--sys-green);
+}
+
+/* Toggle displays of icons based on active classes */
+#universal-mute-btn .icon-unmuted { display: block; }
+#universal-mute-btn .icon-muted { display: none; }
+
+#universal-mute-btn.muted {
+    border-color: #64748b;
+    box-shadow: none;
+}
+
+#universal-mute-btn.muted svg {
+    fill: #64748b;
+}
+
+#universal-mute-btn.muted .icon-unmuted { display: none; }
+#universal-mute-btn.muted .icon-muted { display: block; }
+
+/* --- Miscellaneous Elements --- */
+.no-records, .terminal-error {
+    text-align: center;
+    color: #64748b;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    padding: 30px;
+}
+
+.terminal-error h3 {
+    color: var(--sys-red);
+    margin-bottom: 10px;
+}
+
+/* --- Style Scrollbars for Terminal feel --- */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-deep);
+}
+::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+}
+
+/* --- Glowing Dot Keyframes --- */
+@keyframes pulse {
+    0% { opacity: 0.3; }
+    50% { opacity: 1; }
+    100% { opacity: 0.3; }
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+    #terminal-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    #character-roster {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .char-badge {
+        flex-grow: 1;
+        text-align: center;
+    }
+    #display-content-viewport {
+        aspect-ratio: auto;
+        height: 250px;
+    }
+}

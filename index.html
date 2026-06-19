@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whispers of Aurorachrome - Mothership</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Google Tag Manager -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZV7K4PCTR8"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ZV7K4PCTR8');
+    </script>
+</head>
+<body>
+
+    <!-- Main Container styled like a museum display kiosk / mothership cockpit -->
+    <main id="mothership-terminal">
+        
+        <!-- Header displaying active status / Character banners -->
+        <header id="terminal-header">
+            <div class="logo-area">
+                <h1>Whispers of Aurorachrome</h1>
+                <p class="status-indicator">SYSTEMS: ONLINE // JUNCTION 4.1</p>
+            </div>
+            <!-- Interactive quick-toggle for characters -->
+            <div id="character-roster">
+                <button class="char-badge" data-char="jaxx">Jaxx</button>
+                <button class="char-badge" data-char="dax">Dax</button>
+                <button class="char-badge" data-char="echo">Echo</button>
+            </div>
+        </header>
+
+        <!-- THE MAIN DISPLAY SCREEN (Displays one active thing at a time) -->
+        <section id="museum-display-screen">
+            <!-- This area is dynamic. The JS will swap what goes inside this box -->
+            <div id="display-content-viewport">
+                <!-- Fallback/Welcome State -->
+                <div class="terminal-welcome">
+                    <h2>Welcome to the Aurorachrome Archives</h2>
+                    <p>Walk up to a terminal and select an exhibit below to begin transmission.</p>
+                </div>
+            </div>
+            <h3 id="display-now-playing">System Idle...</h3>
+        </section>
+
+        <!-- THE CONTROL CONSOLE (Categories & Content Lists) -->
+        <section id="terminal-controls">
+            <!-- 1. Category Selector tabs -->
+            <nav id="console-categories">
+                <button class="console-tab active" data-category="lore">Lore Logs</button>
+                <button class="console-tab" data-category="broadcasts">Broadcasts</button>
+                <button class="console-tab" data-category="podcasts">Podcasts</button>
+                <button class="console-tab" data-category="lab">The Lab (Apps)</button>
+            </nav>
+
+            <!-- 2. Dynamic Menu list (Populated by JS based on selected Tab) -->
+            <div id="terminal-menu-wrapper">
+                <div id="terminal-menu-list" class="menu-grid">
+                    <!-- Dynamic buttons from your spreadsheet/JSON go here -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Unified, hidden audio players for ambient sound if still desired -->
+    <div id="ambient-audio-station">
+        <audio id="audio-rain" loop src="audio/rain.mp3"></audio>
+        <audio id="audio-fireplace" loop src="audio/fireplace.mp3"></audio>
+    </div>
+
+    <!-- YouTube & Confetti scripts -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
