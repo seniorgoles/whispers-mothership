@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kaomoji Lab Terminal Module</title>
+    <!-- Tailwind CSS for modern layouts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --terminal-bg: #07080a;
+            --sys-green: #00ff66;
+            --sys-dim-green: rgba(0, 255, 102, 0.15);
+            --border-dim: #1e2633;
+            
+            --jaxx-magenta: #e024ff;
+            --dax-amber: #ff9900;
+            --echo-cyan: #00ffff;
+        }
+        body {
+            background-color: var(--terminal-bg);
+            color: #e2e8f0;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #07080a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 3px;
+        }
+        
+        /* Character specific glow utilities */
+        .theme-jaxx { border-color: var(--jaxx-magenta); color: var(--jaxx-magenta); }
+        .theme-dax { border-color: var(--dax-amber); color: var(--dax-amber); }
+        .theme-echo { border-color: var(--echo-cyan); color: var(--echo-cyan); }
+    </style>
+</head>
+<body class="p-4 md:p-6 select-none">
+
+    <div class="max-w-5xl mx-auto space-y-6">
+        
+        <!-- Header Console Status -->
+        <header class="flex justify-between items-center border-b border-slate-800 pb-4">
+            <div>
+                <h1 class="text-lg font-bold tracking-wider text-white flex items-center gap-2">
+                    <span class="text-[#00ff66]">[SYS_MODULE]</span> KAOMOJI CHAT PROTOCOL
+                </h1>
+                <p class="text-xs text-slate-500 font-mono">CLOSED CAPTION SYNCHRONIZER // VER 2.1</p>
+            </div>
+            <!-- Toggle Module Tabs -->
+            <div class="flex bg-slate-900 border border-slate-800 rounded p-1 gap-1">
+                <button id="tab-presets-btn" class="px-4 py-1.5 text-xs font-mono font-bold rounded text-[#00ff66] bg-[#00ff66]/10 transition-all">
+                    1. CHARACTER CHAT
+                </button>
+                <button id="tab-builder-btn" class="px-4 py-1.5 text-xs font-mono font-bold rounded text-slate-400 hover:text-slate-200 transition-all">
+                    2. CUSTOM CONSTRUCTOR
+                </button>
+            </div>
+        </header>
+
+        <!-- Dynamic Main Display Screen -->
+        <section id="kaomoji-display" class="bg-slate-950 border border-slate-900 rounded p-6 flex flex-col items-center justify-center min-h-[160px] relative overflow-hidden">
+            <div class="absolute top-2 left-2 text-[8px] font-mono text-[#00ff66]/30">PREVIEW TRANSMISSION</div>
+            
+            <div id="active-kaomoji-preview" class="text-3xl md:text-5xl font-bold text-white tracking-widest font-mono select-all transition-all">
+                (◕‿◕✿)
+            </div>
+            
+            <div class="mt-4 flex items-center gap-3">
+                <button id="copy-kaomoji-btn" class="px-4 py-1 bg-[#00ff66]/10 text-[#00ff66] border border-[#00ff66]/30 hover:border-[#00ff66] text-[10px] font-mono font-bold rounded transition-all">
+                    [ COPY KAOMOJI ONLY ]
+                </button>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 1: CHARACTER PRESETS ==================== -->
+        <section id="module-presets" class="space-y-6">
+            
+            <div class="bg-[#00ff66]/5 border border-[#00ff66]/15 rounded p-4 text-xs font-mono leading-relaxed text-[#00ff66]/80">
+                <p class="font-bold mb-1">[!] BANTER COMMUNICATIONS ACTIVE:</p>
+                <p>Click any character block below to copy their custom Kaomoji and closed-caption banter straight to your clipboard, ready for commenting on YouTube!</p>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-3">
+                
+                <!-- JAXX CARD -->
+                <div class="border border-purple-500/20 bg-purple-500/5 p-4 rounded-xl space-y-4">
+                    <div class="flex items-center justify-between border-b border-purple-500/25 pb-2">
+                        <span class="text-xs font-mono font-bold text-[#e024ff]">SYSTEM // JAXX</span>
+                        <span class="bg-[#e024ff]/20 text-[#e024ff] text-[9px] px-1.5 rounded font-mono">COCKY</span>
+                    </div>
+                    <div class="space-y-2" id="jaxx-presets">
+                        <!-- JS generated buttons -->
+                    </div>
+                </div>
+
+                <!-- DAX CARD -->
+                <div class="border border-orange-500/20 bg-orange-500/5 p-4 rounded-xl space-y-4">
+                    <div class="flex items-center justify-between border-b border-orange-500/25 pb-2">
+                        <span class="text-xs font-mono font-bold text-[#ff9900]">SYSTEM // DAX</span>
+                        <span class="bg-[#ff9900]/20 text-[#ff9900] text-[9px] px-1.5 rounded font-mono">ANXIOUS</span>
+                    </div>
+                    <div class="space-y-2" id="dax-presets">
+                        <!-- JS generated buttons -->
+                    </div>
+                </div>
+
+                <!-- ECHO CARD -->
+                <div class="border border-cyan-500/20 bg-cyan-500/5 p-4 rounded-xl space-y-4">
+                    <div class="flex items-center justify-between border-b border-cyan-500/25 pb-2">
+                        <span class="text-xs font-mono font-bold text-[#00ffff]">SYSTEM // ECHO</span>
+                        <span class="bg-[#00ffff]/20 text-[#00ffff] text-[9px] px-1.5 rounded font-mono">CYBER_GEN</span>
+                    </div>
+                    <div class="space-y-2" id="echo-presets">
+                        <!-- JS generated buttons -->
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: CONSTRUCTOR LAB ==================== -->
+        <section id="module-builder" class="hidden grid md:grid-cols-2 gap-6">
+            
+            <!-- Controls Console -->
+            <div class="bg-slate-950 border border-slate-900 rounded p-4 space-y-4 text-sm font-mono">
+                
+                <h3 class="text-xs font-bold text-slate-500 border-b border-slate-800 pb-2">CONSTRUCTOR PARTS</h3>
+
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-[10px] text-slate-500 uppercase mb-1">Left Arm / Hand</label>
+                        <select id="part-l-arm" class="w-full p-2 bg-slate-900 border border-slate-800 rounded text-xs text-white outline-none focus:border-[#00ff66]/40"></select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] text-slate-500 uppercase mb-1">Left Eye / Cheek</label>
+                        <select id="part-l-eye" class="w-full p-2 bg-slate-900 border border-slate-800 rounded text-xs text-white outline-none focus:border-[#00ff66]/40"></select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] text-slate-500 uppercase mb-1">Mouth / Nose</label>
+                        <select id="part-mouth" class="w-full p-2 bg-slate-900 border border-slate-800 rounded text-xs text-white outline-none focus:border-[#00ff66]/40"></select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] text-slate-500 uppercase mb-1">Right Eye / Cheek</label>
+                        <select id="part-r-eye" class="w-full p-2 bg-slate-900 border border-slate-800 rounded text-xs text-white outline-none focus:border-[#00ff66]/40"></select>
+                    </div>
+
+                    <div>
+                        <label class="block text-[10px] text-slate-500 uppercase mb-1">Right Arm / Hand</label>
+                        <select id="part-r-arm" class="w-full p-2 bg-slate-900 border border-slate-800 rounded text-xs text-white outline-none focus:border-[#00ff66]/40"></select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Banter Compositor Panel -->
+            <div class="bg-slate-950 border border-slate-900 rounded p-4 space-y-4 flex flex-col justify-between">
+                <div class="space-y-2">
+                    <h3 class="text-xs font-mono font-bold text-slate-500 border-b border-slate-800 pb-2 uppercase">YouTube Banter Assistant</h3>
+                    <p class="text-[10px] font-mono text-slate-500">Inject custom plaintext next to your constructed Kaomoji to talk directly back to Jaxx, Dax, and Echo:</p>
+                    
+                    <textarea 
+                        id="banter-comment-input" 
+                        placeholder="Type your comment line here... (e.g. Echo you are so cool!)" 
+                        rows="3" 
+                        class="w-full p-3 bg-slate-900 border border-slate-800 rounded text-sm text-white outline-none focus:border-[#00ff66]/40 font-mono"
+                    ></textarea>
+                </div>
+
+                <div class="pt-4 border-t border-slate-900 text-center">
+                    <button id="copy-full-banter-btn" class="w-full py-3 bg-[#00ff66] text-black font-mono font-bold text-xs rounded hover:bg-[#00e55b] transition-all">
+                        [ COPY COMPLETE YOUTUBE COMMENT ]
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+
+    <!-- Scripts Core -->
+    <script>
+        // ===================================================================
+        // ===                    CHARACTER BANTER LORE PRESETS            ===
+        // ===================================================================
+        const CHARACTER_BANTER = {
+            jaxx: [
+                { face: "(⌐■_■)b", dialogue: "Hold my wine. All according to plan..." },
+                { face: "(￢‿￢ )", dialogue: "You guys worry too much. Watch this." },
+                { face: "( ‾́ ◡ ‾́ )", dialogue: "Clearly, I am a genius. Dax is just jealous." }
+            ],
+            dax: [
+                { face: "(•_•;)", dialogue: "Wait, Jaxx... is that frequency signal normal?" },
+                { face: "(ಠ_ಠ)", dialogue: "Jaxx, do NOT touch that button. I'm warning you." },
+                { face: "(；一_一)", dialogue: "I have a terrible feeling about this deployment." }
+            ],
+            echo: [
+                { face: "(*✧∇✧*)", dialogue: "Kaomoji Protocol Online! Let's hack the terminal!" },
+                { face: "(๑>ᴗ<๑)", dialogue: "Look at these encryption packets! Amazing!" },
+                { face: "٩(◕‿◕｡)۶", dialogue: "Mainframe decrypted! We are in!" }
+            ]
+        };
+
+        // ===================================================================
+        // ===                   BUILDER CUSTOMIZER ARRAYS                 ===
+        // ===================================================================
+        const PARTS = {
+            lArm: [
+                { name: "None", val: "" },
+                { name: "Neutral (", val: "(" },
+                { name: "Waving ヾ( ", val: "ヾ( " },
+                { name: "Reaching ヘ( ", val: "ヘ( " },
+                { name: "Cheering ＼( ", val: "＼( " },
+                { name: "Gabbing ヽ( ", val: "ヽ( " },
+                { name: "Shy ლ( ", val: "ლ( " }
+            ],
+            lEye: [
+                { name: "Dot Cheek •", val: "•" },
+                { name: "Happy ^", val: "^" },
+                { name: "Glow *", val: "*" },
+                { name: "Anime ◕", val: "◕" },
+                { name: "Shock O", val: "O" },
+                { name: "Crying T", val: "T" },
+                { name: "Annoyed -", val: "-" },
+                { name: "Lenny ͡°", val: "͡°" },
+                { name: "Angry ó", val: "ó" },
+                { name: "Unamused ಠ", val: "ಠ" }
+            ],
+            mouth: [
+                { name: "Line _", val: "_" },
+                { name: "Happy ‿", val: "‿" },
+                { name: "Cute ω", val: "ω" },
+                { name: "Scream 益", val: "益" },
+                { name: "Wavy ﹏", val: "﹏" },
+                { name: "Anime v", val: "v" },
+                { name: "Circle o", val: "o" },
+                { name: "Angry Д", val: "Д" },
+                { name: "Shy ▿", val: "▿" }
+            ],
+            rEye: [
+                { name: "Dot Cheek •", val: "•" },
+                { name: "Happy ^", val: "^" },
+                { name: "Glow *", val: "*" },
+                { name: "Anime ◕", val: "◕" },
+                { name: "Shock O", val: "O" },
+                { name: "Crying T", val: "T" },
+                { name: "Annoyed -", val: "-" },
+                { name: "Lenny ͡°", val: "͡°" },
+                { name: "Angry ò", val: "ò" },
+                { name: "Unamused ಠ", val: "ಠ" }
+            ],
+            rArm: [
+                { name: "None", val: "" },
+                { name: "Neutral )", val: ")" },
+                { name: "Waving )ノ", val: ")ノ" },
+                { name: "Point )σ", val: ")σ" },
+                { name: "Thumbs Up )b", val: ")b" },
+                { name: "Hugging )づ", val: ")づ" },
+                { name: "Sparkles )ノ*:・ﾟ", val: ")ノ*:・ﾟ" }
+            ]
+        };
+
+        // --- GLOBAL APP STATE ---
+        let selectedKaomoji = "(◕‿◕✿)";
+
+        // --- DOM HOOKS ---
+        const activePreview = document.getElementById('active-kaomoji-preview');
+        const commentInput = document.getElementById('banter-comment-input');
+        
+        // Tab switching buttons
+        const tabPresets = document.getElementById('tab-presets-btn');
+        const tabBuilder = document.getElementById('tab-builder-btn');
+        const modulePresets = document.getElementById('module-presets');
+        const moduleBuilder = document.getElementById('module-builder');
+
+        // Builders
+        const lArmSel = document.getElementById('part-l-arm');
+        const lEyeSel = document.getElementById('part-l-eye');
+        const mouthSel = document.getElementById('part-mouth');
+        const rEyeSel = document.getElementById('part-r-eye');
+        const rArmSel = document.getElementById('part-r-arm');
+
+        // ===================================================================
+        // ===                    INITIALIZE SYSTEM                        ===
+        // ===================================================================
+        function initializeApp() {
+            buildBanterCards();
+            populateBuilderDropdowns();
+            setupTabNavigation();
+            setupCopyButtons();
+            
+            // Initial render
+            assembleCustomKaomoji();
+        }
+
+        // ===================================================================
+        // ===                  TAB NAVIGATION ENGINES                     ===
+        // ===================================================================
+        function setupTabNavigation() {
+            tabPresets.addEventListener('click', () => {
+                tabPresets.className = "px-4 py-1.5 text-xs font-mono font-bold rounded text-[#00ff66] bg-[#00ff66]/10 transition-all";
+                tabBuilder.className = "px-4 py-1.5 text-xs font-mono font-bold rounded text-slate-400 hover:text-slate-200 transition-all";
+                modulePresets.classList.remove('hidden');
+                moduleBuilder.classList.add('hidden');
+            });
+
+            tabBuilder.addEventListener('click', () => {
+                tabBuilder.className = "px-4 py-1.5 text-xs font-mono font-bold rounded text-[#00ff66] bg-[#00ff66]/10 transition-all";
+                tabPresets.className = "px-4 py-1.5 text-xs font-mono font-bold rounded text-slate-400 hover:text-slate-200 transition-all";
+                moduleBuilder.classList.remove('hidden');
+                modulePresets.classList.add('hidden');
+                assembleCustomKaomoji(); // Force update on load
+            });
+        }
+
+        // ===================================================================
+        // ===                BUILD PRESET BANTER CARDS                     ===
+        // ===================================================================
+        function buildBanterCards() {
+            const characters = ['jaxx', 'dax', 'echo'];
+            
+            characters.forEach(char => {
+                const container = document.getElementById(`${char}-presets`);
+                if (!container) return;
+                
+                CHARACTER_BANTER[char].forEach(item => {
+                    const block = document.createElement('div');
+                    block.className = `p-3 rounded border border-slate-800 bg-slate-900/40 hover:bg-slate-900 hover:border-[#00ff66]/20 transition-all cursor-pointer flex flex-col gap-1 relative group`;
+                    
+                    block.innerHTML = `
+                        <div class="text-base font-bold text-white font-mono tracking-wider">${item.face}</div>
+                        <div class="text-[10px] text-slate-400 font-mono italic">"${item.dialogue}"</div>
+                        <span class="absolute top-2 right-2 text-[8px] font-mono text-slate-600 group-hover:text-[#00ff66] transition-all">[COPY]</span>
+                    `;
+                    
+                    // Copy full dialogue banter to clipboard on click
+                    block.addEventListener('click', (e) => {
+                        const copyString = `${item.face} "${item.dialogue}"`;
+                        navigator.clipboard.writeText(copyString);
+                        
+                        selectedKaomoji = item.face;
+                        activePreview.textContent = selectedKaomoji;
+                        
+                        // Copy alert animation
+                        const tip = block.querySelector('span');
+                        tip.textContent = '[COPIED]';
+                        tip.style.color = '#00ff66';
+                        setTimeout(() => {
+                            tip.textContent = '[COPY]';
+                            tip.style.color = '';
+                        }, 1500);
+                    });
+                    
+                    container.appendChild(block);
+                });
+            });
+        }
+
+        // ===================================================================
+        // ===                  CONSTRUCTOR BUILDER                        ===
+        // ===================================================================
+        function populateBuilderDropdowns() {
+            const mappings = [
+                { select: lArmSel, list: PARTS.lArm },
+                { select: lEyeSel, list: PARTS.lEye },
+                { select: mouthSel, list: PARTS.mouth },
+                { select: rEyeSel, list: PARTS.rEye },
+                { select: rArmSel, list: PARTS.rArm }
+            ];
+
+            mappings.forEach(map => {
+                map.select.innerHTML = '';
+                map.list.forEach((item, index) => {
+                    const opt = document.createElement('option');
+                    opt.value = index;
+                    opt.textContent = item.name;
+                    map.select.appendChild(opt);
+                });
+                
+                // Redraw on dropdown selection
+                map.select.addEventListener('change', assembleCustomKaomoji);
+            });
+        }
+
+        function assembleCustomKaomoji() {
+            const la = PARTS.lArm[lArmSel.value].val;
+            const le = PARTS.lEye[lEyeSel.value].val;
+            const m = PARTS.mouth[mouthSel.value].val;
+            const re = PARTS.rEye[rEyeSel.value].val;
+            const ra = PARTS.rArm[rArmSel.value].val;
+
+            // Construct Kaomoji string
+            selectedKaomoji = `${la}${le}${m}${re}${ra}`;
+            activePreview.textContent = selectedKaomoji;
+        }
+
+        // ===================================================================
+        // ===                     CLIPBOARD COPYS                         ===
+        // ===================================================================
+        function setupCopyButtons() {
+            // Copy kaomoji only
+            document.getElementById('copy-kaomoji-btn').addEventListener('click', (e) => {
+                navigator.clipboard.writeText(selectedKaomoji);
+                const originalText = e.target.textContent;
+                e.target.textContent = '[ COPIED KAOMOJI! ]';
+                setTimeout(() => e.target.textContent = originalText, 1500);
+            });
+
+            // Copy full custom YouTube banter comment
+            document.getElementById('copy-full-banter-btn').addEventListener('click', (e) => {
+                const commentText = commentInput.value.trim();
+                let fullString = selectedKaomoji;
+                
+                if (commentText) {
+                    fullString = `${selectedKaomoji} "${commentText}"`;
+                }
+
+                navigator.clipboard.writeText(fullString);
+                const originalText = e.target.textContent;
+                e.target.textContent = '[ COMMENT COPIED TO CLIPBOARD! ]';
+                setTimeout(() => e.target.textContent = originalText, 1500);
+            });
+        }
+
+        window.onload = initializeApp;
+    </script>
+</body>
+</html>

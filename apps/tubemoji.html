@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TubeMoji Terminal Module</title>
+    <!-- Tailwind CSS for sleek interface layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Imported standard typography matching original design -->
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bangers&family=Fredoka:wght@300..700&family=Lobster&family=Monoton&family=Pacifico&family=Righteous&family=Roboto:wght@400;700&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Sci-fi Terminal Overrides */
+        :root {
+            --terminal-bg: #07080a;
+            --sys-green: #00ff66;
+            --sys-dim-green: rgba(0, 255, 102, 0.15);
+            --border-dim: #1e2633;
+        }
+
+        body {
+            background-color: var(--terminal-bg);
+            color: #e2e8f0;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        /* Checkerboard transparency grid for thumbnail canvas previews */
+        .transparent-checkerboard {
+            background-color: #07080a;
+            background-image: 
+                linear-gradient(45deg, #11141b 25%, transparent 25%), 
+                linear-gradient(-45deg, #11141b 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #11141b 75%), 
+                linear-gradient(-45deg, transparent 75%, #11141b 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+
+        /* Tactical range slider styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: #1e293b;
+            height: 4px;
+            border-radius: 2px;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--sys-green);
+            cursor: pointer;
+            box-shadow: 0 0 6px var(--sys-green);
+        }
+
+        /* Scrollbar styles */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #07080a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-6 select-none">
+
+    <div class="max-w-5xl mx-auto space-y-6">
+        
+        <!-- Header Console Status -->
+        <header class="flex justify-between items-center border-b border-slate-800 pb-4">
+            <div>
+                <h1 class="text-lg font-bold tracking-wider text-white flex items-center gap-2">
+                    <span class="text-[#00ff66]">[SYS_MODULE]</span> TUBEMOJI UTILITY
+                </h1>
+                <p class="text-xs text-slate-500 font-mono">COMMS DECRYPT ENGINE // VER 1.2</p>
+            </div>
+            <!-- Toggle Module Tabs -->
+            <div class="flex bg-slate-900 border border-slate-800 rounded p-1 gap-1">
+                <button id="tab-unicode-btn" class="px-4 py-1.5 text-xs font-mono font-bold rounded text-[#00ff66] bg-[#00ff66]/10 transition-all">
+                    1. TITLE TEXT
+                </button>
+                <button id="tab-canvas-btn" class="px-4 py-1.5 text-xs font-mono font-bold rounded text-slate-400 hover:text-slate-200 transition-all">
+                    2. THUMBNAIL EMOJI
+                </button>
+            </div>
+        </header>
+
+        <!-- ==================== TAB 1: TITLE TEXT SYSTEM ==================== -->
+        <section id="module-unicode" class="space-y-4">
+            
+            <!-- Instructions and input -->
+            <div class="bg-[#00ff66]/5 border border-[#00ff66]/15 rounded p-4 text-xs font-mono leading-relaxed text-[#00ff66]/80 mb-6">
+                <p class="font-bold mb-1">[!] COMMUNICATIONS ADVISORY:</p>
+                <p>YouTube titles do not support standard colored text. However, the special <strong>Emoji Letters</strong> and <strong>Block Letters</strong> styles below bypass standard rendering limitations and appear colored on mobile devices and modern platforms.</p>
+            </div>
+
+            <div class="space-y-1">
+                <label class="block text-xs font-mono text-slate-500 uppercase">Input Plaintext Payload:</label>
+                <input 
+                    type="text" 
+                    id="unicode-input" 
+                    value="TubeMoji" 
+                    placeholder="Type title text here..." 
+                    class="w-full p-3 bg-slate-950 border border-slate-800 rounded text-white text-lg font-mono outline-none focus:border-[#00ff66]/40"
+                />
+            </div>
+
+            <!-- Styles Generation Output -->
+            <div class="grid gap-3 md:grid-cols-2" id="unicode-results-grid">
+                <!-- Javascript will inject processed rows here dynamically -->
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: CANVAS DESIGN TOOL ==================== -->
+        <section id="module-canvas" class="hidden grid lg:grid-cols-[300px_1fr] gap-6">
+            
+            <!-- Side Controls Panel -->
+            <div class="bg-slate-950 border border-slate-900 rounded p-4 space-y-4 text-sm">
+                
+                <div>
+                    <label class="block text-[10px] font-mono text-slate-500 uppercase mb-1">Target Phrase / Word</label>
+                    <input 
+                        type="text" 
+                        id="canvas-text" 
+                        value="BOOM" 
+                        maxLength="30"
+                        placeholder="Type word..."
+                        class="w-full p-2 bg-slate-900 border border-slate-800 rounded text-center text-lg font-bold text-white outline-none focus:border-[#00ff66]/40"
+                    />
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-mono text-slate-500 uppercase mb-1">Font Family</label>
+                    <select id="canvas-font" class="w-full p-2 bg-slate-900 border border-slate-800 rounded text-white text-xs outline-none focus:border-[#00ff66]/40">
+                        <option value="Anton" selected>Anton (Impact)</option>
+                        <option value="Bangers">Bangers (Comic)</option>
+                        <option value="Lobster">Lobster (Cursive)</option>
+                        <option value="Pacifico">Pacifico (Brush)</option>
+                        <option value="Monoton">Monoton (Retro)</option>
+                        <option value="Righteous">Righteous (Tech)</option>
+                        <option value="Rubik Mono One">Rubik Mono (Blocky)</option>
+                        <option value="Fredoka">Fredoka (Rounded)</option>
+                        <option value="Roboto">Roboto (Standard)</option>
+                    </select>
+                </div>
+
+                <!-- Color Arrays -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[10px] font-mono text-slate-500 uppercase mb-1">Text Color</label>
+                        <input type="color" id="color-text" value="#eab308" class="w-full h-8 rounded bg-transparent border border-slate-800 cursor-pointer">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-mono text-slate-500 uppercase mb-1">Stroke Color</label>
+                        <input type="color" id="color-stroke" value="#000000" class="w-full h-8 rounded bg-transparent border border-slate-800 cursor-pointer">
+                    </div>
+                </div>
+
+                <!-- Sliders -->
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between text-[10px] font-mono text-slate-500 mb-1">
+                            <span>FONT SIZE limit</span>
+                            <span id="label-size">140px</span>
+                        </div>
+                        <input type="range" id="slider-size" min="50" max="250" value="140" class="w-full">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-[10px] font-mono text-slate-500 mb-1">
+                            <span>STROKE WIDTH</span>
+                            <span id="label-stroke">8px</span>
+                        </div>
+                        <input type="range" id="slider-stroke" min="0" max="25" value="8" class="w-full">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between text-[10px] font-mono text-slate-500 mb-1">
+                            <span>SHADOW OFFSET</span>
+                            <span id="label-shadow">8px</span>
+                        </div>
+                        <input type="range" id="slider-shadow" min="0" max="20" value="8" class="w-full">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Drawing/Preview Area (Wider Aspect Ratio 2:1) -->
+            <div class="bg-slate-950 border border-slate-900 rounded p-6 flex flex-col items-center justify-center min-h-[400px]">
+                <div class="relative w-full max-w-[460px] h-[230px] transparent-checkerboard rounded border border-slate-800 flex items-center justify-center overflow-hidden">
+                    <!-- Hidden High-Res Canvas element -->
+                    <canvas id="emoji-canvas" width="800" height="400" class="hidden"></canvas>
+                    <!-- Visible display image -->
+                    <img id="emoji-preview" alt="Preview Frame" class="w-full h-full object-contain" />
+                </div>
+
+                <div class="mt-6 text-center space-y-2">
+                    <button id="download-png-btn" class="px-6 py-2 bg-[#00ff66] text-black font-mono font-bold text-xs rounded hover:bg-[#00e55b] transition-all shadow-lg shadow-[#00ff66]/10">
+                        [ GENERATE TRANSPARENT PNG ]
+                    </button>
+                    <p class="text-[10px] text-slate-500 font-mono">This file has alpha transparency. Drag on top of thumbnails inside video editors.</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Scripts Core -->
+    <script>
+        // ===================================================================
+        // ===                    UNICODE TRANSLATION LOGIC                 ===
+        // ===================================================================
+        const normal = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        const bold = "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐚𝐛𝐜𝐝𝐞𝐟𝐠𝐡𝐢𝐣𝐤𝐥𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐭𝐮𝐯𝐰𝐱𝐲𝐳𝟎𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗";
+        const italic = "𝐴𝐵𝐶𝐷𝐸𝐹𝐺𝐻𝐼𝐽𝐾𝐿𝑀𝑁𝑂𝑃𝑄𝑅𝑆𝑇𝑈𝑉𝑊𝑋𝑌𝑍𝑎𝑏𝑐𝑑𝑒𝑓𝑔ℎ𝑖𝑗𝑘𝑙𝑚𝑛𝑜𝑝𝑞𝑟𝑠𝑡𝑢𝑣𝑤𝑥𝑦𝑧0123456789";
+        const mono = "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿";
+        const script = "𝒜𝐵𝒞𝒟𝐸𝐹𝒢𝐻𝐼𝒥𝒦𝐿𝑀𝒩𝒪𝒫𝒬𝑅𝒮𝒯𝒰𝒱𝒲𝒳𝒴𝒵𝒶𝒷𝒸𝒹𝑒𝒻𝑔𝒽𝒾𝒿𝓀𝓁𝓂𝓃𝑜𝓅𝓆𝓇𝓈𝓉𝓊𝓋𝓌𝓍𝓎𝓏0123456789";
+        const doubleStruck = "𝔸𝔹ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ𝕒𝕓𝕔𝕕𝕖𝕗𝕘𝕙𝕚𝕛𝕜𝕝𝕞𝕟𝕠𝕡𝕢𝕣𝕤𝕥𝕦𝕧𝕨𝕩𝕪𝕫𝟘𝟙𝟚𝟛𝟜𝟝𝟞𝟟𝟠𝟡";
+        const circled = "ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ0123456789";
+
+        const makeTransform = (targetAlphabet) => {
+            const source = Array.from(normal);
+            const target = Array.from(targetAlphabet);
+            const map = {};
+            source.forEach((char, i) => { if (target[i]) map[char] = target[i]; });
+            return (text) => Array.from(text).map(c => map[c] || c).join('');
+        };
+
+        const STYLES = [
+            {
+                name: 'Emoji Letters (Blue)',
+                transform: (text) => Array.from(text).map(char => {
+                    const code = char.codePointAt(0);
+                    if (!code) return char;
+                    let targetCode = code;
+                    if (code >= 97 && code <= 122) targetCode = code - 32; // Lowercase to uppercase
+                    if (targetCode >= 65 && targetCode <= 90) return String.fromCodePoint(targetCode + 127397);
+                    return char;
+                }).join('\u200C')
+            },
+            {
+                name: 'Block Letters (Filled)',
+                transform: (text) => Array.from(text).map(char => {
+                    const code = char.codePointAt(0);
+                    if (!code) return char;
+                    let targetCode = code;
+                    if (code >= 97 && code <= 122) targetCode = code - 32;
+                    if (targetCode >= 65 && targetCode <= 90) return String.fromCodePoint(targetCode + 127279);
+                    return char;
+                }).join('')
+            },
+            { name: 'Bold Text', transform: makeTransform(bold) },
+            { name: 'Italic Text', transform: makeTransform(italic) },
+            { name: 'Monospace Text', transform: makeTransform(mono) },
+            { name: 'Script Text', transform: makeTransform(script) },
+            { name: 'Double Struck Text', transform: makeTransform(doubleStruck) },
+            { name: 'Circled Text', transform: makeTransform(circled) }
+        ];
+
+        // --- DOM RENDER ---
+        const input = document.getElementById('unicode-input');
+        const grid = document.getElementById('unicode-results-grid');
+
+        function renderUnicode() {
+            grid.innerHTML = '';
+            const txt = input.value || "TubeMoji";
+            
+            STYLES.forEach(style => {
+                const transformed = style.transform(txt);
+                const isSpecial = style.name.includes('Emoji') || style.name.includes('Block');
+                
+                const card = document.createElement('div');
+                card.className = `border border-slate-800 p-4 rounded bg-slate-900/50 flex flex-col justify-between relative group ${isSpecial ? 'border-emerald-500/30 bg-emerald-500/5' : ''}`;
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-[10px] font-mono font-bold tracking-wider ${isSpecial ? 'text-emerald-400' : 'text-slate-500'}">${style.name.toUpperCase()}</span>
+                        <button class="copy-btn text-xs font-mono text-slate-500 hover:text-white transition-all">[COPY]</button>
+                    </div>
+                    <div class="text-lg font-mono text-white select-all break-all pr-8">${transformed}</div>
+                `;
+
+                // Clip Copy
+                card.querySelector('.copy-btn').addEventListener('click', (e) => {
+                    navigator.clipboard.writeText(transformed);
+                    e.target.textContent = '[COPIED]';
+                    e.target.style.color = '#00ff66';
+                    setTimeout(() => {
+                        e.target.textContent = '[COPY]';
+                        e.target.style.color = '';
+                    }, 2000);
+                });
+
+                grid.appendChild(card);
+            });
+        }
+        input.addEventListener('input', renderUnicode);
+        renderUnicode();
+
+        // --- TAB SWITCHER LOGIC ---
+        const tabUnicode = document.getElementById('tab-unicode-btn');
+        const tabCanvas = document.getElementById('tab-canvas-btn');
+        const moduleUnicode = document.getElementById('module-unicode');
+        const moduleCanvas = document.getElementById('module-canvas');
+
+        tabUnicode.addEventListener('click', () => {
+            tabUnicode.className = "px-4 py-1.5 text-xs font-mono font-bold rounded text-[#00ff66] bg-[#00ff66]/10 transition-all";
+            tabCanvas.className = "px-4 py-1.5 text-xs font-mono font-bold rounded text-slate-400 hover:text-slate-200 transition-all";
+            moduleUnicode.classList.remove('hidden');
+            moduleCanvas.classList.add('hidden');
+        });
+
+        tabCanvas.addEventListener('click', () => {
+            tabCanvas.className = "px-4 py-1.5 text-xs font-mono font-bold rounded text-[#00ff66] bg-[#00ff66]/10 transition-all";
+            tabUnicode.className = "px-4 py-1.5 text-xs font-mono font-bold rounded text-slate-400 hover:text-slate-200 transition-all";
+            moduleCanvas.classList.remove('hidden');
+            moduleUnicode.classList.add('hidden');
+            drawCanvas(); // Initial render
+        });
+
+        // ===================================================================
+        // ===                    CANVAS RENDER LOGIC                      ===
+        // ===================================================================
+        const canvas = document.getElementById('emoji-canvas');
+        const preview = document.getElementById('emoji-preview');
+        const textIn = document.getElementById('canvas-text');
+        const fontSel = document.getElementById('canvas-font');
+        const colText = document.getElementById('color-text');
+        const colStroke = document.getElementById('color-stroke');
+        const sizeSlider = document.getElementById('slider-size');
+        const strokeSlider = document.getElementById('slider-stroke');
+        const shadowSlider = document.getElementById('slider-shadow');
+
+        const valSize = document.getElementById('label-size');
+        const valStroke = document.getElementById('label-stroke');
+        const valShadow = document.getElementById('label-shadow');
+
+        function drawCanvas() {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const text = textIn.value || "BOOM";
+            const font = fontSel.value;
+            const targetFontSize = Number(sizeSlider.value);
+            const strokeWidth = Number(strokeSlider.value);
+            const shadowOffset = Number(shadowSlider.value);
+
+            // Update Labels
+            valSize.textContent = `${targetFontSize}px`;
+            valStroke.textContent = `${strokeWidth}px`;
+            valShadow.textContent = `${shadowOffset}px`;
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+
+            // --- AUTO-FIT LOGIC ---
+            // We start drawing with your slider font size.
+            // If the text is wider than the canvas, we shrink the text size dynamically to fit perfectly!
+            let activeFontSize = targetFontSize;
+            ctx.font = `${activeFontSize}px "${font}", sans-serif`;
+            let metrics = ctx.measureText(text);
+            const maxAllowedWidth = canvas.width - 80; // 40px margins on both sides
+
+            while (metrics.width > maxAllowedWidth && activeFontSize > 15) {
+                activeFontSize -= 2;
+                ctx.font = `${activeFontSize}px "${font}", sans-serif`;
+                metrics = ctx.measureText(text);
+            }
+            // ---------------------
+
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.lineJoin = 'round';
+            ctx.miterLimit = 2;
+
+            // Draw Drop Shadow Offset
+            if (shadowOffset > 0) {
+                ctx.shadowColor = '#000000';
+                ctx.shadowBlur = 0;
+                ctx.shadowOffsetX = shadowOffset;
+                ctx.shadowOffsetY = shadowOffset;
+            } else {
+                ctx.shadowColor = 'transparent';
+            }
+
+            // Draw Stroke Outline
+            if (strokeWidth > 0) {
+                ctx.lineWidth = strokeWidth;
+                ctx.strokeStyle = colStroke.value;
+                ctx.strokeText(text, centerX, centerY);
+            }
+
+            // Draw Main Letter Fill
+            ctx.fillStyle = colText.value;
+            ctx.fillText(text, centerX, centerY);
+
+            // Push base64 data to visible Image frame
+            preview.src = canvas.toDataURL('image/png');
+        }
+
+        // Live updating sliders
+        [textIn, fontSel, colText, colStroke, sizeSlider, strokeSlider, shadowSlider].forEach(el => {
+            el.addEventListener('input', drawCanvas);
+        });
+
+        // Trigger render when Google Fonts load to prevent blank canvas on first run
+        document.fonts.ready.then(() => {
+            drawCanvas();
+        });
+
+        // Download PNG click
+        document.getElementById('download-png-btn').addEventListener('click', () => {
+            const text = textIn.value || "BOOM";
+            const link = document.createElement('a');
+            link.download = `emoji-${text}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    </script>
+</body>
+</html>
