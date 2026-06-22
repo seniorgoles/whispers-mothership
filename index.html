@@ -17,52 +17,71 @@
 </head>
 <body>
 
-    <!-- Main Container styled like a museum display kiosk / mothership cockpit -->
+    <!-- Main Container styled like a museum display kiosk -->
     <main id="mothership-terminal">
         
-        <!-- Header displaying active status / Character banners -->
+        <!-- Header: Top-most Channel Selector (Future-Proofed) -->
         <header id="terminal-header">
             <div class="logo-area">
                 <h1>Whispers of Aurorachrome</h1>
-                <p class="status-indicator">SYSTEMS: ONLINE // JUNCTION 4.1</p>
+                <p class="status-indicator">SYSTEMS: ONLINE // JUNCTION 5.1</p>
             </div>
-            <!-- Interactive quick-toggle for characters -->
-            <div id="character-roster">
-                <button class="char-badge" data-char="jaxx">Jaxx</button>
-                <button class="char-badge" data-char="dax">Dax</button>
-                <button class="char-badge" data-char="echo">Echo</button>
+            <!-- Channel Switcher (Main Channel, eventually Jaxx, Dax, Echo) -->
+            <div id="channel-selector">
+                <button class="channel-btn active" data-channel="main">Main Channel</button>
+                <!-- Prepped for future channels: -->
+                <!-- <button class="channel-btn" data-channel="jaxx">Jaxx Feed</button> -->
+                <!-- <button class="channel-btn" data-channel="dax">Dax Feed</button> -->
+                <!-- <button class="channel-btn" data-channel="echo">Echo Feed</button> -->
             </div>
         </header>
 
         <!-- THE MAIN DISPLAY SCREEN (Displays one active thing at a time) -->
         <section id="museum-display-screen">
-            <!-- This area is dynamic. The JS will swap what goes inside this box -->
             <div id="display-content-viewport">
-                <!-- Fallback/Welcome State -->
                 <div class="terminal-welcome">
+                    <img src="images/reno1.jpeg" class="centered-image">
                     <h2>Welcome to the Aurorachrome Archives</h2>
-                    <p>Walk up to a terminal and select an exhibit below to begin transmission.</p>
+                    <p>Select a Category, choose a Series/Playlist, and load your file.</p>
                 </div>
             </div>
             <h3 id="display-now-playing">System Idle...</h3>
         </section>
 
-        <!-- THE CONTROL CONSOLE (Categories & Content Lists) -->
+        <!-- THE CONTROL CONSOLE (Hierarchical Directory) -->
         <section id="terminal-controls">
-            <!-- 1. Category Selector tabs -->
+            
+            <!-- LEVEL 1: Category Selector (Now at the top of the controls) -->
             <nav id="console-categories">
-                <button class="console-tab active" data-category="lore">Lore Logs</button>
-                <button class="console-tab" data-category="broadcasts">Broadcasts</button>
+                <button class="console-tab active" data-category="videos">Videos</button>
                 <button class="console-tab" data-category="podcasts">Podcasts</button>
+                <button class="console-tab" data-category="the_static">The Static (Tabloid)</button>
                 <button class="console-tab" data-category="lab">The Lab (Apps)</button>
             </nav>
 
-            <!-- 2. Dynamic Menu list (Populated by JS based on selected Tab) -->
-            <div id="terminal-menu-wrapper">
-                <div id="terminal-menu-list" class="menu-grid">
-                    <!-- Dynamic buttons from your spreadsheet/JSON go here -->
+            <!-- LEVEL 2: Playlist / Sub-Selection Menu (Dynamic buttons built by JS) -->
+            <div id="playlist-selector-bar">
+                <span class="selector-label">Select Series:</span>
+                <div id="playlist-buttons-container">
+                    <!-- JS will insert buttons like "Season 1", "Shorts", "Issue #1" here -->
                 </div>
             </div>
+
+            <!-- LEVEL 3: Episode / File Selection Grid -->
+            <div id="terminal-menu-wrapper">
+                <div class="menu-header-row">
+                    <span class="selector-label">Select Episode / File:</span>
+                    <!-- DYNAMIC EPISODE PAGINATION CONTROLS -->
+                    <div id="menu-pagination-controls" class="pagination-controls" style="display: none;">
+                        <button id="menu-prev-btn" class="pag-btn">&lt; Prev</button>
+                        <span id="menu-page-indicator" class="page-indicator">Page 1 of 1</span>
+                        <button id="menu-next-btn" class="pag-btn">Next &gt;</button>
+                    </div>
+                </div>
+                <div id="terminal-menu-list" class="menu-grid">
+                    <!-- Dynamic buttons for individual videos/posts go here -->
+                </div>
+              </div>  
         </section>
 
     </main>
@@ -73,7 +92,7 @@
         <audio id="audio-fireplace" loop src="audio/fireplace.mp3"></audio>
     </div>
 
-    <!-- YouTube & Confetti scripts -->
+   <!-- YouTube & Confetti scripts -->
     <script src="https://www.youtube.com/iframe_api"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script src="script.js"></script>
