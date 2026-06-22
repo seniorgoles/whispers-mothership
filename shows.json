@@ -1,28 +1,258 @@
 [
   {
-    "id": "dax_log_01",
-    "category": "lore",
-    "title": "Dax's First Signal Log",
-    "type": "text",
-    "character": "Dax",
-    "content": "This is a direct transmission from Dax.\n\nI've detected some unusual signal interference near the outer rim of Aurorachrome. Jaxx thinks it's nothing, but Echo is already trying to trace the source.\n\nKeep your eyes on this terminal for further updates. We might have company."
-  },
-  {
-    "id": "jaxx_video_01",
-    "category": "broadcasts",
-    "title": "Jaxx's Midnight Run",
+    "id": "fashion1",
+    "channel": "main",
+    "category": "videos",
+    "playlist": "Fashion Films",
+    "title": "📸👗 🇨‌🇭‌🇦‌🇴‌🇸‌ ‌🇨‌🇴‌🇺‌🇹‌🇺‌🇷‌🇪 👗📸",
     "type": "youtube",
-    "videoId": "Sr4bAnARkzE",
-    "character": "Jaxx",
-    "description": "Jaxx takes the cruiser out for a spin through the neon belt."
+    "videoId": "9-y_TJKy4l8"
   },
   {
-    "id": "echo_app_01",
+    "id": "fashion1",
+    "channel": "main",
+    "category": "videos",
+    "playlist": "Fashion Films",
+    "title": "📸👗🇨‌🇭‌🇦‌🇴‌🇸‌ ‌🇨‌🇴‌🇺‌🇹‌🇺‌🇷‌🇪‌ ‌🇹‌🇦‌🇧‌🇱‌🇪‌🇦‌🇺👗📸",
+    "type": "youtube",
+    "videoId": "GrJ7UHqzm5s"
+  },
+  {
+    "id": "fashion1",
+    "channel": "main",
+    "category": "videos",
+    "playlist": "Fashion Films",
+    "title": "🦇🎸 🇻‌🇪‌🇱‌🇻‌🇪‌🇹‌ ‌🇷‌🇪‌🇸‌🇴‌🇳‌🇦‌🇳‌🇨‌🇪 🎸🦇",
+    "type": "youtube",
+    "videoId": "eIINDEiIR6I"
+  },
+  {
+    "id": "fashion1",
+    "channel": "main",
+    "category": "videos",
+    "playlist": "Fashion Films",
+    "title": "🇻‌🇪‌🇱‌🇻‌🇪‌🇹‌ ‌ 🇷‌🇪‌🇸‌🇴‌🇳‌🇦‌🇳‌🇨‌🇪‌ ‌🇸‌🇹‌🇦‌🇹‌🇮‌🇨‌ ‌🇻‌🇮‌🇧‌🇪‌🇸",
+    "type": "youtube",
+    "videoId": "TicuKzCWvyY"
+  },
+  {
+    "id": "fashion1",
+    "channel": "main",
+    "category": "videos",
+    "playlist": "Fashion Films",
+    "title": "👗🟣 🇵‌🇴‌🇱‌🇰‌🇦‌-‌🇩‌🇴‌🇹‌ ‌🇵‌🇦‌🇳‌🇦‌🇨‌🇭‌🇪 🟣👗",
+    "type": "youtube",
+    "videoId": "BtCgzoTHcu0"
+  },
+  {
+    "id": "history1",
+    "channel": "main",
+    "category": "videos",
+    "playlist": "Musicians Brief History",
+    "title": "👨‍🎤The David Bowie File: A Brief History 👨‍🎤",
+    "type": "youtube",
+    "videoId": "l75h-9wCCmU"
+  },
+  {
+    "id": "history2",
+    "channel": "main",
+    "category": "videos",
+    "playlist": "Musicians Brief History",
+    "title": "🎶🔮 The Stevie Nicks File: A Brief History 🔮🎶",
+    "type": "youtube",
+    "videoId": "NkIO3AF6l1E"
+  },
+  {
+    "id": "history3",
+    "channel": "main",
+    "category": "videos",
+    "playlist": "Musicians Brief History",
+    "title": "🇮🇪 The Bono File: A Brief History 🎸",
+    "type": "youtube",
+    "videoId": "1jXs2PTobhI"
+  },
+  {
+    "id": "history4",
+    "channel": "main",
+    "category": "videos",
+    "playlist": "Musicians Brief History",
+    "title": "🎸🇬🇧The John Lennon File: A Brief History 🇬🇧🎸",
+    "type": "youtube",
+    "videoId": "vYzdO7_Yd3g"
+  },
+  {
+    "id": "history5",
+    "channel": "main",
+    "category": "videos",
+    "playlist": "Musicians Brief History",
+    "title": "👅🎸 𝕄𝕚𝕔𝕜 𝕁𝕒𝕘𝕘𝕖𝕣 🎸👅 {𝐀 𝐌𝐮𝐬𝐢𝐜𝐢𝐚𝐧’𝐬 𝐁𝐫𝐢𝐞𝐟 𝐇𝐢𝐬𝐭𝐨𝐫𝐲",
+    "type": "youtube",
+    "videoId": "qALeQpCR69A"
+  },
+  {
+    "id": "static_issue1_story1",
+    "channel": "main",
+    "category": "the_static",
+    "playlist": "The Static Headlines",
+    "title": "𝙸𝚜𝚜𝚞𝚎: \"ℂ𝔸𝕂𝔼𝔾𝔸𝕋𝔼 𝕊𝕔𝕒𝕟𝕕𝕒𝕝!\"",
+    "type": "tabloid",
+    "content": "images/cakegate scandal.jpeg",
+    "url": "https://www.youtube.com/post/UgkxbtUiF4RTcQq_FApgB4rivASnSerw5ciy",
+    "description": "We knew that Pink Cadillac cake looked a little too perfect..."
+  },
+  {
+    "id": "static_issue1_story1",
+    "channel": "main",
+    "category": "the_static",
+    "playlist": "The Static Headlines",
+    "title": "𝙸𝚜𝚜𝚞𝚎: \"𝔽ℝ𝕆𝕄𝔼-𝔾𝔸𝕋𝔼 𝔽𝕃𝕌𝔹!\"",
+    "type": "tabloid",
+    "content": "images/frome gate.jpeg",
+    "url": "https://www.youtube.com/post/Ugkxw0WSBplUmgbo1wwq3Sop3BYjVA0BXFWZ",
+    "description": "𝚆.𝙰.𝙱.𝚂. 𝙽𝙴𝚃𝚆𝙾𝚁𝙺 𝙵𝙾𝚁𝙶𝙴𝚃𝚂 𝙷𝙾𝚆 𝚃𝙾 𝚂𝙿𝙴𝙻𝙻!"
+  },
+  {
+    "id": "static_issue1_story1",
+    "channel": "main",
+    "category": "the_static",
+    "playlist": "The Static Headlines",
+    "title": "𝙸𝚜𝚜𝚞𝚎: \"ℝ𝕆𝔹𝔹𝔼𝔻 𝔹𝕐 ℝ𝕆ℂ𝕂 ℝ𝕆𝕐𝔸𝕃𝕋𝕐\"",
+    "type": "tabloid",
+    "content": "images/robbed.jpeg",
+    "url": "https://www.youtube.com/post/UgkxvQlbwdXoC6PesAfk8c_UcNbR7pyuQnTi",
+    "description": "BARE-EYED AND BETRAYED! JAXX ROBBED BY ROCK ROYALTY!"
+  },
+  {
+    "id": "static_issue1_story1",
+    "channel": "main",
+    "category": "the_static",
+    "playlist": "The Static Headlines",
+    "title": "Issue: \"The Headlight Scandal\"",
+    "type": "tabloid",
+    "content": "images/headlight scandal.jpeg",
+    "url": "https://www.youtube.com/post/UgkxC5r-kpL4WX2wCo4S8UuCn4g6F22KxkqU",
+    "description": "THE SECRET DOUBLE-HEADLIGHT SWAP REVEALED!"
+  },
+  {
+    "id": "static_issue1_story1",
+    "channel": "main",
+    "category": "the_static",
+    "playlist": "The Static Headlines",
+    "title": "𝙸𝚜𝚜𝚞𝚎: \"𝕃𝕆𝕊𝕋\" (𝕋𝕙𝕖 𝟛𝟝 𝕄𝕚𝕤𝕤𝕚𝕟𝕘 𝕎𝕠𝕞𝕖𝕟)",
+    "type": "tabloid",
+    "content": "images/lost.jpeg",
+    "url": "https://www.youtube.com/post/Ugkx47JrBNoTb_r3uQxeeFbdd83OzKusBKQw",
+    "description": "THE MYSTERY OF THE 35: STILL LOST IN THE FOG!"
+  },
+  {
+    "id": "static_issue1_story1",
+    "channel": "main",
+    "category": "the_static",
+    "playlist": "The Static Headlines",
+    "title": "𝙸𝚜𝚜𝚞𝚎: 𝕎.𝔸.𝔹.𝕊. 𝔸ℂℂ𝕆𝕌ℕ𝕋𝕀ℕ𝔾 𝔻𝔼ℙ𝕋: 𝔽𝔸𝕊ℍ𝕀𝕆ℕ 𝕋𝔼ℝℝ𝕆ℝ𝕀𝕊𝕋 𝕆ℝ ℝ𝕌ℕ𝕎𝔸𝕐 ℚ𝕌𝔼𝔼ℕ?!",
+    "type": "tabloid",
+    "content": "images/Haute couture.jpeg",
+    "url": "https://www.youtube.com/post/UgkxnEFymHWq-Tg-4-2r-NVwlvRQ78WP71zg",
+    "description": "Did W.A.B.S. network star Dax just bankrupt the studio for a fashion shoot?!"
+  },
+  {
+    "id": "static_issue1_story1",
+    "channel": "main",
+    "category": "the_static",
+    "playlist": "The Static Headlines",
+    "title": "𝙸𝚜𝚜𝚞𝚎: \"SPAIN ON HIGH ALERT: THE RIOT HAS LANDED!\"",
+    "type": "tabloid",
+    "content": "images/spain on alert.jpeg",
+    "url": "https://www.youtube.com/post/UgkxkONv-I_lkVu1o87q3XjaaHklfVvqHn-L",
+    "description": "Dax-Proxy Destroys Madrid Scooter in Under 10 Minutes!"
+  },
+  {
+    "id": "static_issue1_story1",
+    "channel": "main",
+    "category": "the_static",
+    "playlist": "The Static Headlines",
+    "title": "𝙸𝚜𝚜𝚞𝚎:  'ℕ𝔸ℕ𝕆' ℙℝ𝔼𝔽𝔼ℝ𝕊 𝔼ℂℍ𝕆!",
+    "type": "tabloid",
+    "content": "images/nano scandal.jpeg",
+    "url": "https://www.youtube.com/post/UgkxcfXC0SbD9sdbvRFUdBfuwXFajUz5-4Qo",
+    "description": "AI MUTINY! NEW HIRE 'NANO' PREFERS ECHO!"
+  },
+  {
+    "id": "static_issue1_story1",
+    "channel": "main",
+    "category": "the_static",
+    "playlist": "The Static Headlines",
+    "title": "𝙸𝚜𝚜𝚞𝚎: 𝕎.𝔸.𝔹.𝕊. 𝕃𝕀𝕋𝔼ℝ𝔸ℝ𝕐 𝔻𝕀𝕍𝕀𝕊𝕀𝕆ℕ: 𝔹𝕆𝕆𝕂 𝕋𝕆𝕌ℝ",
+    "type": "tabloid",
+    "content": "images/static dax book.png",
+    "url": "https://www.youtube.com/post/Ugkx5TroUDYmwTLtPZczGj9NSW4G-_y9nD2w",
+    "description": "The crew hit the bookstore today!"
+  },
+  {
+    "id": "static_issue1_story1",
+    "channel": "main",
+    "category": "the_static",
+    "playlist": "The Static Headlines",
+    "title": "𝙸𝚜𝚜𝚞𝚎: \"The Breakfast Heist!\"",
+    "type": "tabloid",
+    "content": "images/breakfast heist.jpeg",
+    "url": "https://www.youtube.com/post/UgkxZxJIhUaGc472DgBf68O6Wn2YERV8yLwX",
+    "description": "Caught on security camera, burglar making a getaway with priceless breakfast..."
+  },
+  {
+    "id": "static_headlines1",
+    "channel": "main",
+    "category": "podcasts",
+    "playlist": "The Static Podcasts",
+    "title": "ℝ𝕆𝔹𝔹𝔼𝔻 𝔹𝕐 ℝ𝕆ℂ𝕂 ℝ𝕆𝕐𝔸𝕃𝕋𝕐",
+    "type": "tabloid",
+    "videoId": "https://youtu.be/Sr4bAnARkzE",
+    "content": "images/robbed.jpeg",
+    "url": "https://youtu.be/Sr4bAnARkzE",
+    "description": "BARE-EYED AND BETRAYED! JAXX ROBBED BY ROCK ROYALTY!"
+  },
+  {
+    "id": "static_headlines1",
+    "channel": "main",
+    "category": "podcasts",
+    "playlist": "The Static Podcasts",
+    "title": "The Headlight Scandal",
+    "type": "tabloid",
+    "videoId": "https://youtu.be/hQY-KMr-m2w",
+    "content": "images/headlight scandal.jpeg",
+    "description": "DAX'S PARKING LOT DISASTER!"
+  },
+  {
+    "id": "static_headlines1",
+    "channel": "main",
+    "category": "podcasts",
+    "playlist": "The Static Podcasts",
+    "title": "CakeGate 𝚂𝚌𝚊𝚗𝚍𝚊𝚕",
+    "type": "tabloid",
+    "videoId": "https://youtu.be/JKNqRqZb_Vk",
+    "content": "images/cakegate scandal.jpeg",
+    "description": "We knew that Pink Cadillac cake looked a little too perfect..."
+  },
+  {
+    "id": "tubemoji_app",
+    "channel": "main",
     "category": "lab",
-    "title": "Echo's Kaomoji Lab V1",
+    "playlist": "AI Studio Apps",
+    "title": "TubeMoji Creator",
     "type": "iframe",
-    "url": "https://aistudio.google.com/apps/drive/1pPXiFP3bs4pdECemkouBO3kPaRoTTC3R?showPreview=true&showAssistant=true",
-    "character": "Echo",
-    "description": "Echo's experimental interactive sub-routine."
+    "url": "apps/tubemoji.html",
+    "description": "Echo's alphanumeric decryption utility. Translate plain title text into fancy Unicode and build customized transparency emotes for video graphics.",
+    "character": "Echo"
+  },
+  {
+    "id": "kaomoji_app",
+    "channel": "main",
+    "category": "lab",
+    "playlist": "AI Studio Apps",
+    "title": "Kaomoji Chat Terminal",
+    "type": "iframe",
+    "url": "apps/kaomoji.html",
+    "description": "Echo's closed-caption Kaomoji protocol. Use automated presets",
+    "character": "Echo"
   }
 ]

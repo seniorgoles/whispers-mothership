@@ -1,27 +1,32 @@
 // ====================================================================
-// === Whispers of Aurorachrome - Museum Terminal Script v5.0       ===
+// === Whispers of Aurorachrome - Hierarchical Terminal Script v5.1 ===
 // ====================================================================
 
 // --- Global State ---
 let siteData = []; // Flat array of database items from shows.json
-let activeCategory = 'lore'; // Default starting tab
-let activeCharacter = 'all'; // Current character filter ('all', 'jaxx', 'dax', 'echo')
-let ytPlayer = null; // Single, unified YouTube player instance
+let activeChannel = 'main'; // Top level: 'main', 'jaxx', 'dax', 'echo'
+let activeCategory = 'videos'; // Mid level 1: 'videos', 'podcasts', 'the_static', 'lab'
+let activePlaylist = ''; // Mid level 2: e.g., 'Season 1', 'Shorts', 'Issue 1'
+let ytPlayer = null; // Unified YouTube player
 let isMuted = true; // Universal master mute
+// === ADD THESE NEW PAGINATION STATES ===
+let menuCurrentPage = 0; 
+const EPISODES_PER_PAGE = 4; // Controls how many display at once
+let currentPlaylistEpisodes = []; // Stores full list of active files
+
+
+
 
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Fetch your streamlined shows.json
     fetch('shows.json')
         .then(response => {
             if (!response.ok) throw new Error('Network error loading database');
             return response.json();
         })
         .then(data => {
-            // Support both a flat array or their older object-based structure
             siteData = Array.isArray(data) ? data : Object.values(data.content || {});
             console.log("Terminal Database Loaded:", siteData);
-            
             initializeTerminal();
         })
         .catch(error => {
@@ -31,84 +36,176 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initializeTerminal() {
-    setupTabNavigation();
-    setupCharacterFilters();
+    setupChannelSelector();
+    setupCategoryNavigation();
     setupUniversalMute();
     setupAmbianceMixer();
+
+    // === ADDED: Tell the browser what to do when clicking pagination buttons ===
+    document.getElementById('menu-prev-btn').addEventListener('click', () => {
+        if (menuCurrentPage > 0) {
+            menuCurrentPage--;
+            renderMenuList();
+        }
+    });
+
+    document.getElementById('menu-next-btn').addEventListener('click', () => {
+        const totalPages = Math.ceil(currentPlaylistEpisodes.length / EPISODES_PER_PAGE);
+        if (menuCurrentPage < totalPages - 1) {
+            menuCurrentPage++;
+            renderMenuList();
+        }
+    });
     
-    // Render the initial menu list based on defaults (Category: 'lore', Character: 'all')
-    renderMenuList();
+    // Auto-select the first category and build the submenus
+    selectCategory(activeCategory);
 }
 
 // ===================================================================
-// ===                  NAVIGATION & FILTERING                     ===
+// ===               LEVEL 1: CHANNEL SELECTOR                     ===
 // ===================================================================
+function setupChannelSelector() {
+    const channelButtons = document.querySelectorAll('.channel-btn');
+    channelButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            channelButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            activeChannel = btn.getAttribute('data-channel');
+            // When changing channels, reset down the chain
+            selectCategory(activeCategory);
+        });
+    });
+}
 
-function setupTabNavigation() {
+// ===================================================================
+// ===               LEVEL 2: CATEGORY NAVIGATION                  ===
+// ===================================================================
+function setupCategoryNavigation() {
     const tabs = document.querySelectorAll('.console-tab');
     tabs.forEach(tab => {
-        tab.addEventListener('click', (e) => {
-            // Update active state in UI
+        tab.addEventListener('click', () => {
             tabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
             
-            // Update active state in memory and re-render
-            activeCategory = tab.getAttribute('data-category');
-            renderMenuList();
+            const category = tab.getAttribute('data-category');
+            selectCategory(category);
         });
     });
 }
 
-function setupCharacterFilters() {
-    const charBadges = document.querySelectorAll('.char-badge');
-    charBadges.forEach(badge => {
-        badge.addEventListener('click', () => {
-            const selectedChar = badge.getAttribute('data-char');
-            
-            // Toggle logic: Clicking an already active character clears the filter
-            if (activeCharacter === selectedChar) {
-                activeCharacter = 'all';
-                badge.classList.remove('active');
-            } else {
-                charBadges.forEach(b => b.classList.remove('active'));
-                activeCharacter = selectedChar;
-                badge.classList.add('active');
-            }
-            
-            renderMenuList();
-        });
+function selectCategory(category) {
+    activeCategory = category;
+    
+    // Find all unique playlists that exist for this Channel + Category
+    const filteredItems = siteData.filter(item => {
+        return item.channel === activeChannel && item.category === activeCategory;
     });
+    
+    // Extract unique playlist names
+    const playlists = [...new Set(filteredItems.map(item => item.playlist).filter(Boolean))];
+    
+    // Render the Playlist Submenu
+    renderPlaylistButtons(playlists);
+    
+    // Auto-select the first playlist in the list, or clear if empty
+    if (playlists.length > 0) {
+        selectPlaylist(playlists[0]);
+    } else {
+        activePlaylist = '';
+        currentPlaylistEpisodes = []; // <-- UPDATE: Reset the global list
+        renderMenuList(); // <-- UPDATE: Call without arguments
+    }
 }
 
 // ===================================================================
-// ===                     MENU RENDERING                           ===
+// ===              LEVEL 3: PLAYLISTS / SUBMENU                   ===
 // ===================================================================
+function renderPlaylistButtons(playlists) {
+    const container = document.getElementById('playlist-buttons-container');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    playlists.forEach(playlistName => {
+        const btn = document.createElement('button');
+        btn.className = 'playlist-sub-tab';
+        btn.textContent = playlistName;
+        
+        if (playlistName === activePlaylist) {
+            btn.classList.add('active');
+        }
+        
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.playlist-sub-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectPlaylist(playlistName);
+        });
+        
+        container.appendChild(btn);
+    });
+}
 
+function selectPlaylist(playlistName) {
+    activePlaylist = playlistName;
+    
+    // UPDATE: Save the filtered episodes straight to the global variable
+    currentPlaylistEpisodes = siteData.filter(item => {
+        return item.channel === activeChannel && 
+               item.category === activeCategory && 
+               item.playlist === activePlaylist;
+    });
+    
+    menuCurrentPage = 0; // Reset pagination back to page 1
+    renderMenuList(); // <-- UPDATE: Call without arguments
+}
+
+// ===================================================================
+// ===              LEVEL 4: EPISODE / SELECTION GRID              ===
+// ===================================================================
+// UPDATE: Ensure there are NO arguments inside the ()
 function renderMenuList() {
     const menuList = document.getElementById('terminal-menu-list');
+    const controls = document.getElementById('menu-pagination-controls');
+    const pageIndicator = document.getElementById('menu-page-indicator');
+    const prevBtn = document.getElementById('menu-prev-btn');
+    const nextBtn = document.getElementById('menu-next-btn');
+    
     if (!menuList) return;
     
-    menuList.innerHTML = ''; // Clear previous menu items
+    menuList.innerHTML = ''; // Clear previous episodes
 
-    // Filter data by BOTH active category AND active character (if set)
-    const filteredItems = siteData.filter(item => {
-        const matchesCategory = item.category === activeCategory;
-        const matchesCharacter = (activeCharacter === 'all') || 
-                                 (item.character && item.character.toLowerCase() === activeCharacter);
-        return matchesCategory && matchesCharacter;
-    });
-
-    if (filteredItems.length === 0) {
-        menuList.innerHTML = `<div class="no-records">No logs found for this system configuration.</div>`;
+    // UPDATE: We now check 'currentPlaylistEpisodes' instead of 'items'
+    if (currentPlaylistEpisodes.length === 0) {
+        menuList.innerHTML = `<div class="no-records">Select a playlist above to view files.</div>`;
+        if (controls) controls.style.display = 'none';
         return;
     }
 
-    // Build modern, clickable terminal directory listings
-    filteredItems.forEach(item => {
+    // Calculate pagination totals
+    const totalPages = Math.ceil(currentPlaylistEpisodes.length / EPISODES_PER_PAGE);
+    
+    // Dynamically show/hide pagination and update state indicators
+    if (controls) {
+        if (totalPages > 1) {
+            controls.style.display = 'flex';
+            if (pageIndicator) pageIndicator.textContent = `Page ${menuCurrentPage + 1} of ${totalPages}`;
+            if (prevBtn) prevBtn.disabled = (menuCurrentPage === 0);
+            if (nextBtn) nextBtn.disabled = (menuCurrentPage >= totalPages - 1);
+        } else {
+            controls.style.display = 'none';
+        }
+    }
+
+    // Slice the array to display only the items for the current active page
+    const startIndex = menuCurrentPage * EPISODES_PER_PAGE;
+    const pageItems = currentPlaylistEpisodes.slice(startIndex, startIndex + EPISODES_PER_PAGE);
+
+    // Build the 4 display buttons
+    pageItems.forEach(item => {
         const button = document.createElement('button');
         button.className = `menu-item-btn char-theme-${item.character ? item.character.toLowerCase() : 'system'}`;
         
-        // Custom inner HTML to make it look like a sci-fi museum listing
         button.innerHTML = `
             <span class="item-tag">[${item.character || 'SYSTEM'}]</span>
             <span class="item-title">${item.title}</span>
@@ -122,26 +219,20 @@ function renderMenuList() {
 // ===================================================================
 // ===                  EXHIBIT LOADER ENGINE                       ===
 // ===================================================================
-
 function loadExhibit(item) {
     const viewport = document.getElementById('display-content-viewport');
     const nowPlayingLabel = document.getElementById('display-now-playing');
     if (!viewport) return;
 
-    // Clean up any old YouTube player memory before switching
     if (ytPlayer) {
         try { ytPlayer.destroy(); } catch(e) {}
         ytPlayer = null;
     }
 
-    // Update terminal label
     nowPlayingLabel.textContent = `Accessing: ${item.title} (${item.character || 'System File'})`;
 
-    // Render based on transmission payload type
     if (item.type === 'youtube') {
-        // Render a clean placeholder and launch single YouTube instance
         viewport.innerHTML = `<div id="terminal-yt-player"></div>`;
-        
         ytPlayer = new YT.Player('terminal-yt-player', {
             videoId: item.videoId,
             playerVars: {
@@ -158,7 +249,6 @@ function loadExhibit(item) {
         });
     } 
     else if (item.type === 'iframe') {
-        // Safely embed your external applications (Google Looker Studio Kaomoji Maker, etc.)
         viewport.innerHTML = `
             <iframe 
                 src="${item.url}" 
@@ -168,12 +258,28 @@ function loadExhibit(item) {
                 allowfullscreen>
             </iframe>`;
     } 
-    else if (item.type === 'text') {
-        // Render direct rich text stories / lore logs / descriptions
+     // === ADD THIS NEW TABLOID CODE CASE ===
+    else if (item.type === 'tabloid') {
+        // Since YouTube blocks iframe embeds on community posts, we display the cover image
+        // and build a highly stylized terminal link to open the original post on YouTube!
+        viewport.innerHTML = `
+            <div class="terminal-tabloid-view">
+                <img src="${item.content}" class="tabloid-cover-image" alt="${item.title}">
+                <div class="tabloid-overlay-controls">
+                    <p class="tabloid-desc">${item.description || 'Accessing encrypted tabloid feed...'}</p>
+                    <a href="${item.url}" target="_blank" class="tabloid-portal-btn">
+                        [ DECRYPT TRANSMISSION // OPEN ON YOUTUBE ]
+                    </a>
+                </div>
+            </div>`;
+    }
+    // ======================================  
+   
+     else if (item.type === 'text') {
         viewport.innerHTML = `
             <div class="terminal-text-log">
                 <h2>${item.title}</h2>
-                <div class="meta-stamp">STAMP: FILE_${item.id.toUpperCase()} // AUTH: ${item.character || 'ANONYMOUS'}</div>
+                <div class="meta-stamp">STAMP: FILE_${item.id.toUpperCase()} // AUTH: ${item.character || 'SYSTEM'}</div>
                 <div class="log-body">${item.content || item.description || 'Empty log transmission.'}</div>
             </div>`;
     }
@@ -182,7 +288,6 @@ function loadExhibit(item) {
 // ===================================================================
 // ===                     AUDIO CONTROLS                           ===
 // ===================================================================
-
 function setupUniversalMute() {
     const muteBtn = document.getElementById('universal-mute-btn');
     const rainAudio = document.getElementById('audio-rain');
@@ -191,7 +296,7 @@ function setupUniversalMute() {
     if (!muteBtn) return;
 
     muteBtn.addEventListener('click', () => {
-        isMuted = !isMuted; // Toggle system master state
+        isMuted = !isMuted;
 
         if (isMuted) {
             muteBtn.classList.add('muted');
@@ -215,7 +320,6 @@ function setupAmbianceMixer() {
 
     if (!rainAudio || !fireplaceAudio || !rainSlider || !fireplaceSlider) return;
 
-    // Standardize volumes matching the initial slider value (0)
     rainAudio.volume = rainSlider.value;
     fireplaceAudio.volume = fireplaceSlider.value;
 
@@ -226,16 +330,11 @@ function setupAmbianceMixer() {
         fireplaceAudio.volume = e.target.value;
     });
 
-    // To comply with browser auto-play policies, unlock HTML5 audio on first user tap
     document.body.addEventListener('click', () => {
         if (rainAudio.paused) rainAudio.play().catch(() => {});
         if (fireplaceAudio.paused) fireplaceAudio.play().catch(() => {});
     }, { once: true });
 }
-
-// ===================================================================
-// ===                       SYSTEM HELPER                          ===
-// ===================================================================
 
 function showTerminalError(message) {
     const viewport = document.getElementById('display-content-viewport');
@@ -248,6 +347,4 @@ function showTerminalError(message) {
     }
 }
 
-// Required empty placeholder for YouTube API architecture
 function onYouTubeIframeAPIReady() {}
-
